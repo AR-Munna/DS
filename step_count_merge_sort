@@ -1,0 +1,87 @@
+#include<bits/stdc++.h>
+using namespace std;
+//int l=0, r=0, c=0;
+void printArray(int a[], int n){
+    int i;
+    for(i=0; i<n; i++) {
+        cout<<a[i]<<" ";
+    }
+    cout<<endl;
+}
+
+void bubbleSort(int a[], int n){
+    int t;
+    for(int i=0; i<n; i++){
+        for(int j=i+1; j<n; j++){
+            if(a[j]<a[i]){
+                t = a[i];
+                a[i] = a[j];
+                a[j] = t;
+            }
+        }
+        cout<<"i: "<<i<<endl;
+        printArray(a,n);
+    }
+}
+
+int mergeArray(int a[], int left, int middle, int right){
+    int n1 = middle-left+1;
+    int n2 = right-middle;
+    int left_array[n1], right_array[n2];
+    
+    for(int i=0; i<n1; i++) left_array[i] = a[left+i];
+    for(int i=0; i<n2; i++) right_array[i] = a[middle+1+i];
+
+    int i=0, j=0, k=left, c=0, cn=0;
+
+    while(i<n1 && j<n2){
+        if(left_array[i]<=right_array[j]) {
+            a[k++] = left_array[i++];
+        }
+        else if(left_array[i]>right_array[j]){
+            a[k++] = right_array[j++];
+            c += n1-i;
+            //cout<<"c: "<<c<<" m: "<<middle<<" i: "<<i<<endl;
+        }
+        //cout<<"i: "<<i<<" m: "<<middle<<" c: "<<c<<" (n1-i): "<<n1-i<<" (m-l): "<<middle-left<<endl;
+    }
+
+    while(i<n1){
+        a[k] = left_array[i];
+        i++;
+        k++;
+    }
+
+    while(j<n2){
+        a[k] = right_array[j];
+        j++;
+        k++;
+    }
+   // cout<<"cn: "<<cn<<endl;
+    return c;
+}
+
+int mergeSort(int a[], int left, int right){
+    int res=0;
+    if(left<right){
+        int middle = (right+left)/2;
+        res += mergeSort(a, left, middle);
+        res += mergeSort(a, middle+1, right);
+
+        res += mergeArray(a, left, middle, right);
+    }
+    //cout<<res<<endl;
+    return res;
+}
+int main(){
+    int a[] = {5, 4, 3, 2, 1};
+    //int a[] = {4, 5, 6, 7, 1};
+    int sz = sizeof(a)/sizeof(a[0]);
+    //bubbleSort(a,sz);
+    cout<<mergeSort(a,0,sz-1)<<endl;
+    //printArray(a, sz);
+    //cout<<c<<endl;
+    //printArray(a, sz);
+    //cout<<a[n-k]<<endl;
+    return 0;
+}
